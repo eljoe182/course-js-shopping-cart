@@ -12,7 +12,8 @@ function loadEvents() {
   clearCartBtn.addEventListener("click", clearCartAndList);
 }
 
-function clearCartAndList() {
+function clearCartAndList(e) {
+  e.preventDefault();
   cartItems = [];
   cleanCart();
 }
@@ -51,6 +52,7 @@ function getInfoCourse(course) {
 }
 
 function addCourse(e) {
+  e.preventDefault();
   if (e.target.classList.contains("agregar-carrito")) {
     const course = e.target.parentElement.parentElement;
     const dataCourse = getInfoCourse(course);
