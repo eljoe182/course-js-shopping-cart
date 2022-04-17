@@ -4,18 +4,11 @@ const clearCartBtn = document.querySelector("#vaciar-carrito");
 
 let cartItems = [];
 
-loadEvents();
-
-function loadEvents() {
-  courseList.addEventListener("click", addCourse);
-  courseCart.addEventListener("click", removeCourse);
-  clearCartBtn.addEventListener("click", clearCartAndList);
-}
-
 function clearCartAndList(e) {
   e.preventDefault();
   cartItems = [];
   cleanCart();
+  syncCartLocalStorage();
 }
 
 function cleanCart() {
@@ -51,6 +44,10 @@ function getInfoCourse(course) {
   };
 }
 
+function syncCartLocalStorage() {
+  localStorage.setItem("shoppingCart", JSON.stringify(cartItems));
+}
+
 function addCourse(e) {
   e.preventDefault();
   if (e.target.classList.contains("agregar-carrito")) {
@@ -69,6 +66,7 @@ function addCourse(e) {
       cartItems.push(dataCourse);
     }
     addItemToCart(cartItems);
+    syncCartLocalStorage();
   }
 }
 
@@ -81,5 +79,16 @@ function removeCourse(e) {
     const newCartItems = cartItems.filter((item) => item.id !== courseId);
     cartItems = [...newCartItems];
     addItemToCart(cartItems);
+    syncCartLocalStorage();
   }
+}
+
+loadEvents();
+
+function loadEvents() {
+  cartItems = JSON.parse(localStorage.getItem("shoppingCart")) || [];
+  addItemToCart(cartItems);
+  courseList.addEventListener("click", addCourse);
+  courseCart.addEventListener("click", removeCourse);
+  clearCartBtn.addEventListener("click", clearCartAndList);
 }
